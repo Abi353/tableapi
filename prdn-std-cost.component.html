@@ -1,0 +1,376 @@
+@if (isLoading) {
+<div class="d-flex align-items-center justify-content-center"
+  style="position: fixed; inset: 0; z-index: 10000; backdrop-filter: blur(1px);">
+  <mat-progress-spinner class="spinner" diameter="50" mode="indeterminate" />
+</div>
+}
+<div class="gWrapper eWV">
+  <app-header [Titleheader]="currentRateTitle" back="true" (BackClick)="backNavigation()" />
+  <div class="row mx-2 justify-content-center">
+    <form [formGroup]="currenRateForm" id="submitForm" class="salesreportformclass">
+      <div class="col-12 gcardContainer mt-2">
+        <!-- <div class="row">
+        <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+          <div class="row form-group">
+            <label class="col-12 col-md-12 col-lg-4 gInputLable-12">Client / Server<span
+            class="text-danger">*</span></label>
+            <div class="col-12 col-md-12 col-lg-6">
+              <mat-select type="text" class="gInnerInput-12" formControlName="clientOrServer"
+                id="clientOrServer"
+                (selectionChange)="changeRateType(currenRateForm.get('clientOrServer').value)">
+                <mat-option class="gSelectOption" value="Client">Client</mat-option>
+                <mat-option class="gSelectOption" value="Server">Server</mat-option>
+              </mat-select>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-sm-12 col-md-6 col-lg-4"
+          *ngIf="currenRateForm.get('clientOrServer').value =='Client'">
+          <div class="row form-group">
+            <label class="col-12 col-md-12 col-lg-4 gInputLable-12">Rate Type<span
+            class="text-danger">*</span></label>
+            <div class="col-12 col-md-12 col-lg-5">
+              <mat-select type="text" class="gInnerInput-12" formControlName='rateType' id="rateType">
+                <mat-option class="gSelectOption"
+                  *ngFor="let typ of ['Current Rate','Day Wise Rate']" [value]="typ"
+                (onSelectionChange)="getCommonCodes($event,typ,'rateType','')">{{typ}}</mat-option>
+              </mat-select>
+            </div>
+            <label *ngIf="currenRateForm.get('rateType').value =='Day Wise Rate'"
+            class="col-12 col-md-12 col-lg-3 gInputLable-12">From Date</label>
+          </div>
+        </div>
+        <div class="col-12 col-sm-12 col-md-6 col-lg-4"
+          *ngIf="currenRateForm.get('rateType').value =='Day Wise Rate'">
+          <div class="row form-group">
+            <div class="col-12 col-md-12 col-lg-5">
+              <div class="gOuterInput">
+                <input [matDatepicker]="picker1" class="gInnerInput" autocomplete="off"
+                  formControlName="fromDate" id="fromDate" />
+                  <mat-datepicker-toggle matSuffix [for]="picker1" class="gInputButton">
+                    <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                  </mat-datepicker-toggle>
+                  <mat-datepicker #picker1></mat-datepicker>
+                </div>
+              </div>
+              <label class="col-12 col-md-12 col-lg-2 gInputLable-12">To Date</label>
+              <div class="col-12 col-md-12 col-lg-5">
+                <div class="gOuterInput">
+                  <input [matDatepicker]="picker" class="gInnerInput" autocomplete="off"
+                    formControlName="toDate" id="toDate" />
+                    <mat-datepicker-toggle matSuffix [for]="picker" class="gInputButton">
+                      <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                    </mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> -->
+        <div class="col-12 col-sm-5 col-xl-4 d-flex mb-2 ">
+          @if (!showLocation) {
+          <button mat-button class="gIconButton" type="button" (click)="showLocation = !showLocation">
+            <mat-icon style="font-size:19px !important;line-height: 19px !important;">add</mat-icon>
+          </button>
+          }
+          @if (showLocation) {
+          <button mat-button class="gIconButton" type="button" (click)="showLocation = !showLocation">
+            <mat-icon style="line-height: 9px !important">minimize</mat-icon>
+          </button>
+          }
+          <span class="gInputLable"> &nbsp; &nbsp;<b>Location Selection</b></span>
+        </div>
+        @if (showLocation) {
+        <div class="row mt-2">
+          <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+            <div class="row form-group">
+              <label class="col-12 col-md-12 col-lg-4 gInputLable-12">Company Name<span
+                  class="text-danger">*</span></label>
+              <div class="col-12 col-md-12 col-lg-8">
+                <input matInput formControlName="company" id="company" class="gInnerInput-12"
+                  [matAutocomplete]="autoCompleteComp">
+                <mat-autocomplete class="gAutoCompleteContainer" #autoCompleteComp="matAutocomplete"
+                  [displayWith]="checkCmp">
+                  @for (li of companyList; track li) {
+                  <mat-option class="gSelectOption" [value]="li"
+                    (onSelectionChange)="getCommonCodes($event,li,'company','region')">
+                    {{li.Cmpname}}
+                  </mat-option>
+                  }
+                </mat-autocomplete>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+            <div class="row form-group">
+              <label class="col-12 col-md-12 col-lg-4 gInputLable-12">Finbook<span class="text-danger">*</span></label>
+              <div class="col-12 col-md-12 col-lg-8">
+                <input type="text" class="gInnerInput-12" formControlName="finbook" id="finbook"
+                  [matAutocomplete]="autoFinbook" #filterFinbook>
+                <mat-autocomplete class="gAutoCompleteContainer" #autoFinbook="matAutocomplete"
+                  [appDisplayWith]="'FbName'">
+                  @for (li of FbNameList |filter:filterFinbook.value; track li) {
+                  <mat-option class="gSelectOption" [value]="li"
+                    (onSelectionChange)="getCommonCodes($event,li,'finbook')">{{li.FbName}}</mat-option>
+                  }
+                </mat-autocomplete>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+            <div class="row form-group">
+              <label class="col-12 col-md-12 col-lg-4 gInputLable-12">Cost Center<span
+                  class="text-danger">*</span></label>
+              <div class="col-12 col-md-12 col-lg-8">
+                <input type="text" class="gInnerInput-12" formControlName="costCenter" id="costCenter"
+                  [matAutocomplete]="autoCostCenter" #filterCostCenter>
+                <mat-autocomplete class="gAutoCompleteContainer" #autoCostCenter="matAutocomplete"
+                  [appDisplayWith]="'costcenter'">
+                  @for (li of costCenterData |filter:filterCostCenter.value; track li) {
+                  <mat-option class="gSelectOption" [value]="li"
+                    (onSelectionChange)="getCommonCodes($event,li,'costCenter')">{{li.costcenter}}</mat-option>
+                  }
+                </mat-autocomplete>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+            <div class="row form-group">
+              <label class="col-12 col-md-12 col-lg-4 gInputLable-12">Location Name<span
+                  class="text-danger">*</span></label>
+              <div class="col-12 col-md-12 col-lg-8">
+                <input type="text" class="gInnerInput-12" formControlName="location" id="location"
+                  [matAutocomplete]="autoLoc" #filterLoc>
+                <mat-autocomplete class="gAutoCompleteContainer" #autoLoc="matAutocomplete" [displayWith]="checkLoc">
+                  @for (li of locationList|filter:filterLoc.value; track li) {
+                  <mat-option class="gSelectOption" [value]="li"
+                    (onSelectionChange)="getCommonCodes($event,li,'location')">{{li.brname}}</mat-option>
+                  }
+                </mat-autocomplete>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-12 col-md-6 col-lg-4" appMonthYear>
+            <div class="row form-group">
+              <label class="col-12 col-md-12 col-lg-4 gInputLable-12">Month<span class="text-danger">*</span></label>
+              <div class="col-12 col-md-12 col-lg-8">
+                <div class="gOuterInput">
+                  <input [matDatepicker]="picker" class="gInnerInput" autocomplete="off" formControlName="month"
+                    id="month" />
+                  <mat-datepicker-toggle matSuffix [for]="picker" class="gInputButton">
+                    <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                  </mat-datepicker-toggle>
+                  <!-- <mat-datepicker #picker></mat-datepicker> -->
+                  <mat-datepicker #picker (monthSelected)="closeDatePicker($event,picker)" startView="year" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+            <div class="row form-group">
+              <label class="col-12 col-md-12 col-lg-4 gInputLable-12">Cost Method
+                <span class="text-danger">*</span></label>
+              <div class="col-12 col-md-12 col-lg-8">
+                <input type="text" class="gInnerInput-12" formControlName="cstmtd" id="cstmtd"
+                  [matAutocomplete]="auto">
+                <mat-autocomplete class="gAutoCompleteContainer" #auto="matAutocomplete">
+                  <!-- @for (li of FbNameList |filter:filterFinbook.value; track li) { -->
+                  <mat-option class="gSelectOption" *ngFor="let option of cstmtdList" [value]="option"
+                    >{{option}}</mat-option>
+                  <!-- } -->
+                </mat-autocomplete>
+              </div>
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+      <div class="col-12 gcardContainer mt-2">
+        <div class="col-12 col-sm-5 col-xl-4 d-flex mb-2 ">
+          @if (!showItem) {
+          <button mat-button class="gIconButton" type="button" (click)="showItem = !showItem">
+            <mat-icon style="font-size:19px !important;line-height: 19px !important;">add</mat-icon>
+          </button>
+          }
+          @if (showItem) {
+          <button mat-button class="gIconButton" type="button" (click)="showItem = !showItem">
+            <mat-icon style="line-height: 9px !important">minimize</mat-icon>
+          </button>
+          }
+          <span class="gInputLable"> &nbsp; &nbsp;<b>Item Selection</b> </span>
+        </div>
+        @if (showItem) {
+        <div class="row mt-2">
+          <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+            <div class="row form-group">
+              <label class="col-12 col-md-12 col-lg-4 gInputLable-12">Main Category<span
+                  class="text-danger">*</span></label>
+              <div class="col-12 col-md-12 col-lg-8">
+                <mat-select type="text" class="gInnerInput-12" formControlName="mainCat" id="mainCat">
+                  @for (li of mainCatList; track li) {
+                  <mat-option class="gSelectOption" [value]="li.Maincat"
+                    (onSelectionChange)="getCommonCodes($event,li,'mainCat','subCat')">{{li.Maincat}}</mat-option>
+                  }
+                </mat-select>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+            <div class="row form-group">
+              <label class="col-12 col-md-12 col-lg-4 gInputLable-12">Sub Category<span
+                  class="text-danger">*</span></label>
+              <div class="col-12 col-md-12 col-lg-8">
+                <input type="text" class="gInnerInput-12" formControlName="subCat" id="subCat"
+                  [matAutocomplete]="autoSubCat">
+                <mat-autocomplete class="gAutoCompleteContainer" #autoSubCat="matAutocomplete"
+                  [displayWith]="checkSubcat">
+                  @for (li of subCatList; track li) {
+                  <mat-option class="gSelectOption" [value]="li"
+                    (onSelectionChange)="getCommonCodes($event,li,'subCat','category')">{{li.subcat}}</mat-option>
+                  }
+                </mat-autocomplete>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+            <div class="row form-group">
+              <label class="col-12 col-md-12 col-lg-4 gInputLable-12">Category<span class="text-danger">*</span></label>
+              <div class="col-12 col-md-12 col-lg-8">
+                <input type="text" class="gInnerInput-12" formControlName="category" id="category"
+                  [matAutocomplete]="autoCat">
+                <mat-autocomplete class="gAutoCompleteContainer" #autoCat="matAutocomplete" [displayWith]="checkCat">
+                  @for (li of categoryList; track li) {
+                  <mat-option class="gSelectOption" [value]="li"
+                    (onSelectionChange)="getCommonCodes($event,li,'category','itemCode')">{{li.cat}}</mat-option>
+                  }
+                </mat-autocomplete>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+            <div class="row form-group">
+              <label class="col-12 col-md-12 col-lg-4 gInputLable-12">Item Code<span
+                  class="text-danger">*</span></label>
+              <div class="col-12 col-md-12 col-lg-8">
+                <div class="gOuterInput">
+                  <input type="text" class="gInnerInput-12" formControlName="itemCode" id="itemCode"
+                    (keydown.enter)="getItemCodeGlobal($event)" (keypress)="Decimal($event)" autocomplete="off"
+                    [disabled]="this.currenRateForm.get('itemCode').value == 0">
+                  <button (click)="getItemCodeGlobal()" type="button" id="goButton" mat-button class="gInputButton"
+                    [disabled]="this.currenRateForm.get('itemCode').value == 0">
+                    <i class="fa fa-arrow-circle-right"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+            <div class="row form-group">
+              <label class="col-12 col-md-12 col-lg-4 gInputLable-12">Item Name<span
+                  class="text-danger">*</span></label>
+              <div class="col-12 col-md-12 col-lg-8">
+                <input type="text" class="gInnerInput-12" formControlName="itemName" id="itemName"
+                  [matAutocomplete]="autoItem">
+                <mat-autocomplete class="gAutoCompleteContainer" #autoItem="matAutocomplete" [displayWith]="checkIname">
+                  @for (item of itemNameList; track item) {
+                  <mat-option class="gSelectOption" [value]="item"
+                    (onSelectionChange)="getCommonCodes($event,item,'itemName')">{{item.iname}}</mat-option>
+                  }
+                </mat-autocomplete>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-12 col-md-6 col-lg-1 mt-1">
+             <!-- (click)="clipboarddd()" -->
+            <button type="button" class="newButton" (click)="viewCurrwntRate()"><mat-icon
+                style="font-size: 22px !important;color: #686e6e !important;">navigate_next</mat-icon><mat-icon
+                style="font-size: 22px !important;margin-left: -16px !important;color: #686e6e !important;">navigate_next</mat-icon></button>
+          </div>
+        </div>
+        }
+      </div>
+      <!-- <div class="col-12 gcardContainer mt-2">
+                        <div class="col-12 col-sm-5 col-xl-4 d-flex mb-2 ">
+                          <button mat-button class="gIconButton" type="button" (click)="showData=!showData" *ngIf="!showData">
+                            <mat-icon style="font-size:19px !important;line-height: 19px !important;">add</mat-icon>
+                          </button>
+                          <button mat-button class="gIconButton" type="button" (click)="showData =!showData" *ngIf="showData">
+                            <mat-icon style="line-height: 9px !important">minimize</mat-icon>
+                          </button>
+                          <span class="gInputLable"> &nbsp; &nbsp;<b>Data Selection</b> </span>
+                        </div>
+                        <div *ngIf="showData">
+                          <div class="row mt-2 mx-2">
+                            <div class="col-6 col-sm-3 col-md-3 col-lg-1" *ngFor="let li of headerList">
+                              <div class="row form-group d-flex">
+                                <div class="col-1">
+                                  <input class="red-input" type="checkbox" [checked]="allChecked"
+                                    (click)="onHeaderSelect($event,li)" />
+                                  </div>
+                                  <div class="col-5">
+                                    <label class="gInputLable">{{li.TblCaption}}</label>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div> -->
+    </form>
+    <div class="row mx-2 mt-2">
+      <div class="gTableSection">
+        <div class="gTableActionheaders justify-content-between">
+          <div class="d-flex gap-2 align-content-center">
+            <!-- <button type="button" class="newButton" (click)="viewCurrwntRate()"
+                              ><mat-icon
+                            style="font-size: 22px !important;color: #686e6e !important;">navigate_next</mat-icon><mat-icon
+                          style="font-size: 22px !important;margin-left: -16px !important;color: #686e6e !important;">navigate_next</mat-icon></button> -->
+
+          </div>
+          <div class="d-flex gap-3 align-items-center">
+            <form role="search" class="search-form ml-2 ">
+              <input type="search" name="Search" class="gSearchText1 " [(ngModel)]="dataSearch" autocomplete="off"
+                (ngModelChange)="applyFilter(dataSearch)">
+            </form>
+            <input class="gInnerInput" id="itedd" style="width: 80px !important;" [(ngModel)]="itemPerPage"
+              type="number">
+            <mat-paginator [hidePageSize]="true" #paginator [pageSize]="itemPerPage" (page)="pageEvent($event)"
+              [showFirstLastButtons]="true" />
+
+            @if (dataSource.data.length>0) {
+            <img Cores px-0 class="png-icon gXlButton curser " src=".\assets\gImg\excel1.png" (click)="downloadXlFun()"
+              matTooltip="Excel Export">
+            }
+          </div>
+        </div>
+
+        <div class="gInnerTable" style="max-height: calc(100vh - 340px) !important;">
+          <table mat-table [dataSource]="dataSource" matSort class="gNormalTable-sm table">
+            @for (column of displayedColumns; track column) {
+            <ng-container [matColumnDef]="column">
+              <ng-container>
+                <th
+                  [ngClass]="{'textAlign': column == 'FinalRate' || column == 'Labourcost'  || column == 'Machinehours' || column == 'Materialcost' || column == 'Overheads','text2':column == 'subcat'}"
+                  mat-header-cell *matHeaderCellDef mat-sort-header> {{ column | titlecase }} </th>
+                <td
+                  [ngClass]="{'textAlign': column == 'FinalRate' || column == 'Labourcost'  || column == 'Machinehours' || column == 'Materialcost' || column == 'Overheads','text2':column == 'subcat'}"
+                  mat-cell *matCellDef="let element">
+                  @if(column === 'tdate'){
+                  {{element[column]|date:'dd-MMM-yyyy'}}
+                  }@else {
+                  {{element[column]}}
+                  } </td>
+              </ng-container>
+            </ng-container>
+            }
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell text-center" colspan="4">{{dataSource.data.length ===0 ?
+                'No record found' : 'No data matching the filter'}}</td>
+            </tr>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
