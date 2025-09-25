@@ -1,0 +1,73 @@
+.textAlign{
+  text-align: end !important;
+  align-items: end!important;
+}
+.text2{
+  text-align: left !important;
+}
+
+th.mat-header-cell,
+td.mat-cell {
+  background: #fff;
+  z-index: 1;
+}
+
+td {
+  background: white;
+}
+
+.sticky-col-2 {
+  position: sticky;
+  left: 0px;
+  line-height: 20px;
+  z-index: 0;
+}
+
+.sticky-col-3 {
+  position: sticky;
+  left: 80px;
+  z-index: 0;
+}
+
+.sticky-col-5 {
+  position: sticky;
+  left: 160px;
+  z-index: 0;
+}
+
+.textAlign{
+  text-align: end !important;
+  align-items: end!important;
+}
+.eWV {
+  ::ng-deep .mat-mdc-paginator-range-actions {
+    gap: 4px !important;
+  }
+  ::ng-deep .mat-mdc-paginator-container {
+    min-height: auto !important;
+  }
+  ::ng-deep .mat-mdc-paginator {
+    background-color: transparent !important;
+  }
+  ::ng-deep .mat-mdc-icon-button.mat-mdc-button-base {
+    --mat-icon-button-state-layer-size: 24px !important;
+  }
+  ::ng-deep .mat-mdc-paginator-range-label {
+    margin: 0 4px 0 4px !important;
+  }
+}
+
+.paddingHeader{
+      padding-left: 45px !important;
+    width: 0;
+    /* text-align: end; */
+}
+.paddingHeader1{
+      padding-left: 62px !important;
+    width: 0;
+    /* text-align: end; */
+}
+
+.gToggleFooter {
+  font-weight: bold !important;
+}

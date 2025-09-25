@@ -1,0 +1,303 @@
+@if (isLoading) {
+<div class="d-flex align-items-center justify-content-center"
+    style="position: fixed; inset: 0; z-index: 10000; backdrop-filter: blur(1px);">
+    <mat-progress-spinner class="spinner" diameter="50" mode="indeterminate"></mat-progress-spinner>
+</div>
+}
+
+<div class="gWrapper eWV">
+    <app-header [Titleheader]="'Indirect Expenses'" back="true" (BackClick)="backNavigation()" />
+
+    <!-- <div class="row mx-2 justify-content-center"> -->
+    <div class="gcardContainer m-2">
+        <form [formGroup]="overheadcostApp" class="purchaseDetailsForm">
+            <div class="row">
+                <div class="col-12 col-sm-4 col-md-3 col-lg-3  col-xl-3">
+                    <div class="row form-group">
+                        <label for="company" class="gInputLable-11 col-sm-12 col-md-12 ">Company</label>
+                        <div class="col-sm-12 col-md-12">
+                            <input type="text" class="gInnerInput-11" id="company" formControlName="CmpName"
+                                [matAutocomplete]="compList" readonly />
+                            <mat-autocomplete #compList="matAutocomplete" class="gAutoCompleteContainer"
+                                appDisplayWith="company">
+                                @for (item of companyList; track $index) {
+                                <mat-option class="gSelectOption" [value]="item"
+                                    (onSelectionChange)="selectionChange($event, item ,'company')">
+                                    {{ item['company'] }}
+                                </mat-option>
+                                }
+                            </mat-autocomplete>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-3 col-md-2 col-lg-3 col-xl-3">
+                    <div class="row form-group">
+                        <label for="finBook" class="gInputLable-11 col-sm-12 col-md-12 ">Fin Book</label>
+                        <div class="col-sm-12 col-md-12 ">
+                            <input type="text" class="gInnerInput-11" id="finBookList1" formControlName="finBook"
+                                [matAutocomplete]="finBook" (keydown)="keytab($event, 'warehouse')" />
+                            <mat-autocomplete #finBook="matAutocomplete" appDisplayWith="FbName"
+                                class="gAutoCompleteContainer">
+                                @for (item of finbokList | filter:
+                                overheadcostApp.get('finBook').value ; track $index) {
+                                <mat-option class="gSelectOption" [value]="item"
+                                    (onSelectionChange)="selectionChange($event, item,'finbook') ">
+                                    {{ item['FbName'] }}
+                                </mat-option>
+                                }
+                            </mat-autocomplete>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-5 col-md-4 col-lg-3 col-xl-3">
+                    <div class="row form-group">
+                        <label for="warehouse" class="gInputLable-11 col-sm-12 col-md-12 ">Warehouse</label>
+                        <div class="col-sm-12 col-md-12 ">
+                            <input type="text" class="gInnerInput-11" id="warehouse" formControlName="warehouse"
+                                [matAutocomplete]="autoBranchName" (keydown)="keytab($event, 'warehouse')" />
+                            <mat-autocomplete #autoBranchName="matAutocomplete" [appDisplayWith]="'brname'"
+                                class="gAutoCompleteContainer">
+                                @for (test of warehosueList; track test) {
+                                <mat-option (onSelectionChange)="selectionChange($event,test,'warehouse')"
+                                    class="gSelectOption" [value]="test">{{ test.brname
+                                    }}</mat-option>
+                                }
+                            </mat-autocomplete>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-4 col-md-3 col-lg-3 col-xl-3" appMonthYear>
+                    <div class="row form-group">
+                        <label for="monthlywise" class="gInputLable-11 col-sm-12 col-md-12 ">Month Name</label>
+                        <div class="">
+                            <input type="text" class="gInnerInput-11" formControlName="monthlywise" id="monthlywise"
+                                [matAutocomplete]="monthlywise" (keydown)="keytab($event, 'overheadName')">
+                            <mat-autocomplete class="gAutoCompleteContainer" #monthlywise="matAutocomplete">
+                                @for (li of monthList|filter: overheadcostApp.get('monthlywise').value ;track
+                                li) {
+                                <mat-option class="gSelectOption" [value]="li.RateLogic"
+                                    (onSelectionChange)="selectionChange($event,li,'monthlywise')">{{li.RateLogic}}</mat-option>
+                                }
+                            </mat-autocomplete>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                    <!-- <div class="row form-group mt-1">
+                        <label for="overheadName" class="gInputLable-11 col-sm-12 col-md-12 ">OverheadName</label>
+                        <div class="col-sm-12 col-md-12 ">
+                            <input type="text" class="gInnerInput-11" id="overheadName" formControlName="overheadName"
+                                [matAutocomplete]="autoovrhadnam" (keydown)="keytab($event, 'reptyp')" />
+                            <mat-autocomplete #autoovrhadnam="matAutocomplete" class="gAutoCompleteContainer">
+                                @for (headNam of ovrheadname|filter: overheadcostApp.get('overheadName').value;
+                                track headNam) {
+                                <mat-option (onSelectionChange)="selectionChange($event,headNam,'overhead')"
+                                    class="gSelectOption" [value]="headNam.OHName">{{ headNam.OHName
+                                    }}</mat-option>
+                                }
+                            </mat-autocomplete>
+                        </div>
+                    </div> -->
+                    <div class="row form-group mt-1 ">
+                        <label for="overheadName" class="gInputLable-11 col-sm-12 col-md-12 ">OverheadName</label>
+                        <div class="col-sm-12 col-md-12 ">
+                            <mat-select type="text" class="gInnerInput-11" formControlName="overheadName"
+                                id="overheadName">
+                                @for (li of ovrheadname; track li) {
+                                <mat-option class="gSelectOption" [value]="li.OHName"
+                                    (onSelectionChange)="selectionChange($event,li,'overhead')">{{li.OHName}}</mat-option>
+                                }
+                            </mat-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-5 col-md-4 col-lg-3 col-xl-3">
+                    <div class="form-group">
+                        <label for="reptyp" class="gInputLable-11">ReportType</label>
+                        <div class="d-flex align-items-center ">
+                            <div class="gOuterInput col-12 col-xl-10 col-lg-10 col-mg-10 col-sm-10">
+                                <mat-select type="text" class="gInnerInput-11" formControlName="overheadrep"
+                                    id="reptyp">
+                                    @for (li of ovrheadrep; track li) {
+                                    <mat-option class="gSelectOption" [value]="li.Trnname"
+                                        (onSelectionChange)="selectionChange($event,li,'overheadtyp')">{{li.Trnname}}</mat-option>
+                                    }
+                                </mat-select>
+                                <button appTooltip="View" type="button" mat-button class="gInputButton"
+                                    id="ViewDialogbutton" (click)="viewoverhead()">
+                                    <mat-icon>autorenew</mat-icon>
+                                </button>
+                            </div>
+
+                        </div>
+                        <!-- <mat-autocomplete #autoovradtyp="matAutocomplete" class="gAutoCompleteContainer">
+                            @for (headtyp of ovrheadrep|filter: overheadcostApp.get('overheadrep').value; track
+                            headtyp) {
+                            <mat-option (onSelectionChange)="selectionChange($event,headtyp,'overheadtyp')"
+                                class="gSelectOption" [value]="headtyp.Trnname">{{ headtyp.Trnname
+                                }}</mat-option>
+                            }
+                        </mat-autocomplete> -->
+                    </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-5 col-lg-6 col-xl-6 mt-md-4 d-flex justify-content-end">
+                    <div class="form-group">
+                        <a href="" (click)="getprocessApi(); $event.preventDefault();">
+                            Process
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- <div class="row mt-2"> -->
+    <div class="gTableSection m-2">
+        <div class="gTableActionheaders justify-content-between">
+            <div class="d-flex gap-2 align-content-center">
+            </div>
+            <div class="d-flex gap-3 align-items-center">
+                <!-- <form role="search" class="search-form ml-2 ">
+                    <input type="search" name="Search" class="gSearchText1 " [(ngModel)]="dataSearch" autocomplete="off"
+                        (ngModelChange)="applyFilter(dataSearch)">
+                </form> -->
+                <form role="search" class="search-form ml-3 ">
+                    <input type="search" name="Search" class="gSearchText " [(ngModel)]="dataSearch" autocomplete="off"
+                        (ngModelChange)="dataSourceFilter(dataSearch,dataSource)">
+                </form>
+                <input class="gInnerInput" id="itedd" style="width: 80px !important;" [(ngModel)]="itemPerPage"
+                    type="number">
+                <mat-paginator style="background-color: #e3f0ef;" [hidePageSize]="true" #paginator
+                    [pageSize]="itemPerPage" (page)="pageEvent($event)" [showFirstLastButtons]="true" />
+                @if (dataSource.data.length>0) {
+                @if (TrnStatus !== 'AUTHORIZED') {
+                <!-- @if(overheadcostApp.get("overheadrep").value === 'Detailed') { -->
+                <button mat-button class="gNormalButton text-nowrap" id="fetchButton" type="button" matTooltip="Approve"
+                    (click)="getapproveApi()">
+                    <mat-icon style="font-size: 20px;">check</mat-icon> Approve
+                </button>
+                <!-- } -->
+                }
+
+                }
+
+                @if (dataSource.data.length>0) {
+                <img Cores px-0 class="png-icon gXlButton curser " src=".\assets\gImg\excel1.png"
+                    (click)="downloadXlFun()" matTooltip="Excel Export">
+                }
+            </div>
+        </div>
+
+        <div class="gInnerTable" style="max-height: calc(100vh - 340px) !important;">
+            <table mat-table [dataSource]="dataSource" matSort class="gNormalTable-sm table">
+                @for (column of displayedColumns; let colIndex = $index; track column;) {
+                <ng-container [matColumnDef]="column">
+                    <ng-container>
+                        @if (column == 'Amt') {
+                        @if(overheadcostApp.get("overheadrep").value === 'OrgUnitwise_Overheadwise' ||
+                        overheadcostApp.get("overheadrep").value === 'Warehousewise' ||
+                        overheadcostApp.get("overheadrep").value === 'OrgUnitwise') {
+                        <th [ngClass]="{'paddingHeader1':column === 'Amt'}" mat-header-cell *matHeaderCellDef
+                            mat-sort-header class="flex-header text-end">
+                            <ng-container>{{ column }}</ng-container>
+                        </th>
+                        }
+                        <th [ngClass]="{'paddingHeader':column === 'Amt'}" mat-header-cell *matHeaderCellDef
+                            mat-sort-header class="flex-header text-end">
+                            <ng-container>{{ column }}</ng-container>
+                        </th>
+                        } @else {
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="{
+              'sticky-col-2': colIndex === 1,
+              'sticky-col-3': colIndex === 2,
+              'sticky-col-5': colIndex === 4
+            }" [style.z-index]="3">
+                            <!-- {{ column | titlecase }} -->
+                            {{ column === 'SNo' ? 'SNo' : (column | titlecase) }}
+                        </th>
+                        }
+                        @if (column == 'Amt') {
+                        @if(overheadcostApp.get("overheadrep").value === 'OrgUnitwise_Overheadwise' ||
+                        overheadcostApp.get("overheadrep").value === 'Warehousewise' ||
+                        overheadcostApp.get("overheadrep").value === 'OrgUnitwise') {
+                        <td mat-cell *matCellDef="let element;let i = index" class="text-end"
+                            style="padding-right: 28px !important; width: 0px!important;">
+                            <ng-container>{{ element[column] }}</ng-container>
+                        </td>
+                        }
+                        <td mat-cell *matCellDef="let element;let i = index" class="text-end"
+                            style="padding-right: 28px !important; width: 0px!important;">
+                            <ng-container>{{ element[column] }}</ng-container>
+                        </td>
+                        } @else {
+                        <td mat-cell *matCellDef="let element;let i = index" [ngClass]="{
+              'sticky-col-2': colIndex === 1,
+              'sticky-col-3': colIndex === 2,
+              'sticky-col-5': colIndex === 4
+            }">
+                            <!-- {{element[column]}} -->
+                            @if (column == 'SNo') {
+                            <ng-container>{{ i+1}}</ng-container>
+                            }
+                            @else {
+                            <ng-container>{{ element[column] }}</ng-container>
+                            }
+                        </td>
+                        }
+                        <td mat-footer-cell *matFooterCellDef class="text-end"
+                            [ngClass]="overheadcostApp.get('warehouse').value?.brname !== 'ALL' ? 'gToggleFooter' : ''">
+                            @if(overheadcostApp.get("warehouse").value?.brname !== "ALL"){
+                            <ng-container *ngIf="column === 'SNo'">
+                                Total
+                            </ng-container>
+                            <!-- <ng-container *ngIf="column !== 'SNo'">
+                    {{ columnTotals1()[column] }}
+                  </ng-container> -->
+                            <!-- if u don't want to show warehosue all just add && shouldShowTotals -->
+                            @if(column == 'Amt') {
+                            <ng-container *ngIf="column !== 'SNo'">
+                                {{ columnTotals1()[column] | gCurrencyPipe}}
+                            </ng-container>
+                            } @else {
+                            <ng-container *ngIf="column !== 'SNo'">
+                                {{ columnTotals1()[column]}}
+                            </ng-container>
+                            }
+
+                            }
+                        </td>
+                    </ng-container>
+                </ng-container>
+                }
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell text-center" colspan="4">{{dataSource.data.length ===0 ?
+                        'No record found' : 'No data matching the filter'}}</td>
+                </tr>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                <!-- if u don't want to show warehosue all just add && [hidden]="!shouldShowTotals" -->
+                <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true">
+                </tr>
+            </table>
+        </div>
+    </div>
+    <!-- </div> -->
+
+    @if (dataSource.data.length>0) {
+    <div class="row mx-2">
+
+        <label class="gInputLable-11" id="sts"><b>Note &nbsp;:&nbsp;</b> Data Cosidered Month : <b>{{ monthnam
+                }}</b></label>
+            <!-- *ngIf="overheadcostApp.get('overheadrep')?.value === 'Detailed'" -->
+        <div class="col-auto d-flex align-items-center gap-3 flex-wrap">
+            <label class="gInputLable-11" id="sts">Status : <b>{{ TrnStatus }}</b></label>
+
+            <ng-container *ngIf="TrnStatus === 'AUTHORIZED'">
+                <label class="gInputLable-11">Approved By : <b>{{ Processby }}</b></label>
+                <label class="gInputLable-11">Approved On : <b>{{ Processon }}</b></label>
+            </ng-container>
+        </div>
+    </div>
+    }
+    <!-- </div> -->
+</div>
