@@ -1,0 +1,21 @@
+.sticky-col-3 {
+  position: sticky;
+  left: 0px;
+  z-index: 0;
+}
+
+.sticky-col-5 {
+  position: sticky;
+  left: 80px;
+  z-index: 0;
+}
+
+th.mat-header-cell,
+td.mat-cell {
+  background: #fff;
+  z-index: 1;
+}
+
+td {
+  background: white;
+}

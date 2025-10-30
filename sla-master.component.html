@@ -1,0 +1,471 @@
+@if (isLoading) {
+<div class="d-flex align-items-center justify-content-center"
+    style="position: fixed; inset: 0; z-index: 10000; backdrop-filter: blur(1px);">
+    <mat-progress-spinner class="spinner" diameter="50" mode="indeterminate"></mat-progress-spinner>
+</div>
+}
+
+<div class="gWrapper">
+    <app-header Titleheader="{{SectionTitle}}" back="true" (BackClick)="backNavigation()" />
+
+    <div class="gcardContainer m-2">
+        <form [formGroup]="slaMastersection">
+            <div class="row">
+                <div class="col-12 col-md-4 col-lg-4">
+                    <label for="company" class="gInputLable-11">Company Name</label>
+                    <div class="col-lg-12">
+                        <input type="text" class="gInnerInput-11" id="company" formControlName="CmpName"
+                            [matAutocomplete]="compList" (keydown)="keytab($event, 'warehouse')" />
+                        <mat-autocomplete #compList="matAutocomplete" class="gAutoCompleteContainer">
+                            @for (item of cmpyList | filter: slaMastersection.get('CmpName').value ;track $index) {
+                            <mat-option class="gSelectOption" [value]="item.compname"
+                                (onSelectionChange)="selectionChange($event, item ,'companyView')">
+                                {{ item.compname }}
+                            </mat-option>
+                            }
+                        </mat-autocomplete>
+                    </div>
+                </div>
+
+                <!-- <div class="col-12 col-md-4 col-lg-4">
+                    <label for="finbok" class="gInputLable-11">Fin Book</label>
+                    <div class="col-lg-12">
+                        <input type="text" class="gInnerInput-11" id="finbok" formControlName="finBook"
+                                [matAutocomplete]="finbokList"  />
+                        <mat-autocomplete #finbokList="matAutocomplete" class="gAutoCompleteContainer"
+                            appDisplayWith="FbName">
+                            @for (item of finbookListing | filter: slaMastersection.get('finBook').value; track $index) {
+                            <mat-option class="gSelectOption" [value]="item"
+                                (onSelectionChange)="selectionChange($event, item ,'finbook')">
+                                {{ item['compname'] }}
+                            </mat-option>
+                            }
+                        </mat-autocomplete>
+                    </div>
+                </div> -->
+
+                <div class="col-12 col-md-3 col-lg-3">
+                    <label for="warehouse" class="gInputLable-11">Ware House Name</label>
+                    <div class="col-lg-12">
+                        <input type="text" class="gInnerInput-11" id="warehouse" formControlName="wareHouse"
+                            [matAutocomplete]="warehouseList" (keydown)="keytab($event, 'department')" />
+                        <mat-autocomplete #warehouseList="matAutocomplete" class="gAutoCompleteContainer">
+                            @for (item of warehouseListing | filter: slaMastersection.get('wareHouse').value; track
+                            $index) {
+                            <mat-option class="gSelectOption" [value]="item.brname"
+                                (onSelectionChange)="selectionChange($event, item ,'warehouseView')">
+                                {{ item.brname }}
+                            </mat-option>
+                            }
+                        </mat-autocomplete>
+                        <!-- 
+                        <input type="text" class="gInnerInput-border" id="CustomerName"
+                            (keydown)="keytab($event,'SaveCustomerBalanceBtn')" formControlName="CustomerName"
+                            [matAutocomplete]="CustomerName">
+                        <mat-autocomplete #CustomerName="matAutocomplete" class="gAutoCompleteContainer">
+                            <mat-option *ngFor="let ask of CustomerSearchArrayList" [value]="ask.name"
+                                class="gSelectOption"
+                                (onSelectionChange)="CommonChangeEvent($event,ask,'CustomerName')">
+                                {{ask.name}}
+                            </mat-option>
+                        </mat-autocomplete> -->
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-3 col-lg-3">
+                    <label for="department" class="gInputLable-11">Department Name</label>
+                    <div class="col-lg-12 gOuterInput">
+                        <input type="text" class="gInnerInput-11" id="department" formControlName="Deparment"
+                            [matAutocomplete]="deptList" (keydown)="keytab($event, 'viewbtn')" />
+                        <mat-autocomplete #deptList="matAutocomplete" class="gAutoCompleteContainer">
+                            @for (item of deptListing | filter: slaMastersection.get('Deparment').value; track $index) {
+                            <mat-option class="gSelectOption" [value]="item.DepartMent"
+                                (onSelectionChange)="selectionChange($event, item ,'dept')">
+                                {{ item['DepartMent'] }}
+                            </mat-option>
+                            }
+                        </mat-autocomplete>
+                        <button class="gInputButton" id="viewbtn" mat-button type="button" (click)="view()">
+                            <mat-icon>fast_forward</mat-icon>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-2 col-lg-2">
+                    <div class="col-lg-12 mt-4">
+                        <button type="button" id="viewbtn" mat-button class="gSaveButton" matTooltip="Add"
+                            (click)="viewData()">
+                            <mat-icon style="font-size: 20px !important;">add</mat-icon>
+                            Add New
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+               <section class="gTableSection eWV mt-2">
+            <div class="gTableActionheaders">
+                <form role="search" class="search-form ml-3">
+                    <input type="search" name="Search" class="gSearchText" #input autocomplete="off"
+                        [(ngModel)]="searchviewTable" (ngModelChange)="dataSourceFilter(searchviewTable,dataSource)" />
+                </form>
+                @if (dataSource.data.length > 0) {
+                <img Cores px-0 class="gXlButton" src=".\assets\gImg\excel1.png" type="submit" matTooltip="Excel Export"
+                    (click)="viewExportExcel()">
+                }
+                <!-- <input class="gInnerInput" id="itedd" style="width: 80px !important;" [(ngModel)]="itemPerPage"
+                    type="number">
+                <mat-paginator [hidePageSize]="true" #paginator1 [pageSize]="itemPerPage" (page)="pageEvent($event)"
+                    [showFirstLastButtons]="true"></mat-paginator> -->
+            </div>
+            <div class="gInnerTable" style="max-height: calc(100vh - 200px)">
+                <table mat-table [dataSource]="dataSource" matSort class="gNormalTable-sm table" id="viewTable">
+                    <ng-container matColumnDef="SNo">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> S.No </th>
+                        <td mat-cell *matCellDef="let element;let i = index"> {{i+1}} </td>
+                    </ng-container>
+                    
+                    <ng-container matColumnDef="DeptName">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Department</th>
+                        <td mat-cell *matCellDef="let element"> {{element.DeptName}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="SLAtype">
+                        <th [ngClass]="'sticky-col-3'"[style.z-index]="2" mat-header-cell *matHeaderCellDef mat-sort-header>Sla Type</th>
+                        <td [ngClass]="'sticky-col-3'" mat-cell *matCellDef="let element"> {{element.SLAtype}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="PrcessName">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="flex-header text-end"> Process Name </th>
+                        <td mat-cell *matCellDef="let element"> {{element.PrcessName}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="edit">
+                        <th [ngClass]="'sticky-col-5'" [style.z-index]="3" mat-header-cell *matHeaderCellDef mat-sort-header> Edit </th>
+                        <td [ngClass]="'sticky-col-5'" mat-cell *matCellDef="let element;let i = index"> <i style="cursor: pointer;" class="fa fa-hand-o-right"
+                        (click)="editslaView(element,'Edit')"></i> </td>
+                    </ng-container>
+                    <ng-container matColumnDef="TimeUnit">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="flex-header text-end"> Time Unit </th>
+                        <td mat-cell *matCellDef="let element" class="receipt-amt-cell"
+                            style="padding-right: 28px !important; width: 0px!important;">
+                            {{element.TimeUnit}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="startPoint">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Start Point </th>
+                        <td mat-cell *matCellDef="let element;let i = index"> {{element.startPoint}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="EndPoint">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>End Point</th>
+                        <td mat-cell *matCellDef="let element"> {{element.EndPoint}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Priority">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Priority</th>
+                        <td mat-cell *matCellDef="let element"> {{element.Priority}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Description">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Decription</th>
+                        <td mat-cell *matCellDef="let element"> {{element.Description}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Requestor">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Requestor</th>
+                        <td mat-cell *matCellDef="let element"> {{element.Requestor}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Approver">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Approver</th>
+                        <td mat-cell *matCellDef="let element"> {{element.Approver}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="BreachCondition">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Breach</th>
+                        <td mat-cell *matCellDef="let element"> {{element.BreachCondition}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Escalation">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Escalation</th>
+                        <td mat-cell *matCellDef="let element"> {{element.Escalation}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Notes">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Comments</th>
+                        <td mat-cell *matCellDef="let element"> {{element.Notes}} </td>
+                    </ng-container>
+                    <!-- <ng-container matColumnDef="status">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+                        <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+                    </ng-container> -->
+                    <ng-container matColumnDef="modifiedBy">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Modified By</th>
+                        <td mat-cell *matCellDef="let element"> {{element.modifiedBy}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="modifiedOn">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Modified On</th>
+                        <td mat-cell *matCellDef="let element"> {{element.modifiedOn}} </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="headers"></tr>
+                    <tr mat-row *matRowDef="let row; columns: headers;let i = index" tabindex="0"></tr>
+                    <!-- <tr class="mat-row" *matNoDataRow>
+                        <td class="mat-cell text-center" [attr.colspan]="headers.length">
+                            No record found.
+                        </td>
+                    </tr> -->
+                </table>
+            </div>
+        </section>
+ 
+    </div>
+
+
+    @if(isEntryView){
+    <div class="modal" id="dialogId" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+        style="backdrop-filter: brightness(0.5) !important; display: block;">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content gModalContent" style="background: white;">
+                <div class="gDialogTitle">
+                    <span></span> <!-- for center position -->
+                    <span> {{Edited ? "Create New SLA Entry" : "Update SLA Entry"}}</span>
+                    <button type="button" id="submit" class="gDialogCloseButton" (click)="isEntryView = flase">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </div>
+                <div class="modal-body gDialogContainer p-2 gcardContainer">
+                    <form [formGroup]="entryForm">
+                        <div class="row p-xl-4">
+                            <div class="col-12">
+                                <div class="row form-group">
+                                    @if(!Edited) {
+                                        <span class="gInputLable-11">SLA Code : - {{vartwnval}}</span>
+                                    }
+                                    <div class="col-12 col-md-6 col-lg-4">
+                                        <div class="row">
+                                            <label class="gInputLable">Company</label>
+                                            <div class="col">
+                                                <input type="text" class="gInnerInput-11" id="companysla"
+                                                    formControlName="CmpNameSLA" readonly />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6 col-lg-4">
+                                        <div class="row">
+                                            <label class="gInputLable">Location</label>
+                                            <div class="col">
+                                                <input type="text" class="gInnerInput-11" id="warehosuesla"
+                                                    formControlName="whNameSLA" [matAutocomplete]="warehouseListsla"
+                                                    (keydown)="keytab($event, 'deptsla')" />
+                                                <mat-autocomplete #warehouseListsla="matAutocomplete"
+                                                    class="gAutoCompleteContainer">
+                                                    @for (item of warehouseListing | filter:
+                                                    entryForm.get('whNameSLA').value; track
+                                                    $index) {
+                                                    <mat-option class="gSelectOption" [value]="item.brname"
+                                                        (onSelectionChange)="selectionChange($event, item ,'deptsla')">
+                                                        {{ item['brname'] }}
+                                                    </mat-option>
+                                                    }
+                                                </mat-autocomplete>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6 col-lg-4">
+                                        <div class="row">
+                                            <label class="gInputLable">Department</label>
+                                            <div class="col">
+                                                <input type="text" class="gInnerInput-11" id="deptsla"
+                                                    formControlName="deptNameSLA" [matAutocomplete]="deptList"
+                                                    (keydown)="keytab($event, 'reqtypsla')" />
+                                                <mat-autocomplete #deptList="matAutocomplete"
+                                                    class="gAutoCompleteContainer">
+                                                    @for (item of deptListing | filter:
+                                                    entryForm.get('deptNameSLA').value; track $index) {
+                                                    <mat-option class="gSelectOption" [value]="item.DepartMent"
+                                                        (onSelectionChange)="selectionChange($event, item ,'sladept')">
+                                                        {{ item['DepartMent'] }}
+                                                    </mat-option>
+                                                    }
+                                                </mat-autocomplete>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="col-12 col-md-6 col-lg-4">
+                                        <div class="row">
+                                            <label class="gInputLable">Section</label>
+                                            <div class="col">
+                                                <input type="text" class="gInnerInput-11" id="sectsla"
+                                                    formControlName="sectNameSLA"
+                                                    (keydown)="keytab($event, 'reqtypsla')" autocomplete="off" />
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                    <div class="col-12 col-md-6 col-lg-4">
+                                        <div class="row">
+                                            <label class="gInputLable">SLA Type</label>
+                                            <div class="col">
+                                                <mat-select class="gInnerInput-11" id="reqtypsla"
+                                                    formControlName="reqNameSLA"
+                                                    required>
+                                                    <mat-option class="gSelectOption" *ngFor="let slatyp of slaType"
+                                                    (onSelectionChange)="selectionChange($event, item ,'reqtypsla')"
+                                                        [value]="slatyp.label">
+                                                        {{ slatyp.key }}
+                                                    </mat-option>
+                                                </mat-select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6 col-lg-4">
+                                        <div class="row">
+                                            <label class="gInputLable">Process Name</label>
+                                            <div class="col">
+                                                <input type="text" class="gInnerInput-11" id="pronam"
+                                                    formControlName="pronaNameSLA"
+                                                    (keydown)="keytab($event, 'timeunit')" autocomplete="off" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6 col-lg-4">
+                                        <div class="row">
+                                            <label class="gInputLable">Time Units</label>
+                                            <div class="col">
+                                                <mat-select class="gInnerInput-11" id="timeunit"
+                                                    formControlName="timeunitSLA" required>
+                                                    <mat-option class="gSelectOption" *ngFor="let timuni of timeUnit" 
+                                                    (onSelectionChange)="selectionChange($event, item ,'timeunit')"
+                                                        [value]="timuni.label">
+                                                        {{ timuni.key }}
+                                                    </mat-option>
+                                                </mat-select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6 col-lg-4">
+                                        <div class="row">
+                                            <label class="gInputLable">Start Point</label>
+                                            <div class="col">
+                                                <input type="text" class="gInnerInput-11" id="startpoint"
+                                                    formControlName="startpointSLA"
+                                                    (keydown)="keytab($event, 'endpoint')" autocomplete="off" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6 col-lg-4">
+                                        <div class="row">
+                                            <label class="gInputLable">End Point: No-of-days from starting point</label>
+                                            <div class="col">
+                                                <input type="text" class="gInnerInput-11" id="endpoint"
+                                                    formControlName="endpointSLA" (keydown)="keytab($event, 'priority')"
+                                                    autocomplete="off" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6 col-lg-4">
+                                        <div class="row">
+                                            <label class="gInputLable">Priority</label>
+                                            <div class="col">
+                                                <mat-select class="gInnerInput-11" id="priority"
+                                                    formControlName="prioritySLA"
+                                                    required>
+                                                    <mat-option class="gSelectOption" *ngFor="let prior of prioritylvl"
+                                                    (onSelectionChange)="selectionChange($event, item ,'priority')"
+                                                        [value]="prior.label">
+                                                        {{ prior.key }}
+                                                    </mat-option>
+                                                </mat-select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6 col-lg-4">
+                                        <div class="row">
+                                            <label class="gInputLable">Description / Scope</label>
+                                            <div class="col">
+                                                <input type="text" class="gInnerInput-11" id="desc"
+                                                    formControlName="descSLA" (keydown)="keytab($event, 'requ')"
+                                                    autocomplete="off" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6 col-lg-4">
+                                        <div class="row">
+                                            <label class="gInputLable">Requester</label>
+                                            <div class="col">
+                                                <input type="text" class="gInnerInput-11" id="requ"
+                                                    formControlName="requSLA" (keydown)="keytab($event, 'approve')"
+                                                    autocomplete="off" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6 col-lg-4">
+                                        <div class="row">
+                                            <label class="gInputLable">Approver</label>
+                                            <div class="col">
+                                                <input type="text" class="gInnerInput-11" id="approve"
+                                                    formControlName="approveSLA" (keydown)="keytab($event, 'breach')"
+                                                    autocomplete="off" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6 col-lg-4">
+                                        <div class="row">
+                                            <label class="gInputLable">SLA Breach Conditions</label>
+                                            <div class="col">
+                                                <input type="text" class="gInnerInput-11" id="breach"
+                                                    formControlName="breachSLA" (keydown)="keytab($event, 'escalunit')"
+                                                    autocomplete="off" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6 col-lg-4">
+                                        <div class="row">
+                                            <label class="gInputLable">Escalation</label>
+                                            <div class="col">
+                                                <mat-select class="gInnerInput-11" id="escalunit"
+                                                    formControlName="elcalationSLA"
+                                                    required>
+                                                    <mat-option class="gSelectOption" *ngFor="let escla of escalation"
+                                                    (onSelectionChange)="selectionChange($event, item ,'escalunit')"
+                                                        [value]="escla.label">
+                                                        {{ escla.key }}
+                                                    </mat-option>
+                                                </mat-select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6 col-lg-4">
+                                        <div class="row">
+                                            <label class="gInputLable">Notes / Comments</label>
+                                            <div class="col">
+                                                <input type="text" class="gInnerInput-11" id="notcmt"
+                                                    formControlName="notcmtSLA" (keydown)="keytab($event, 'breach2')"
+                                                    autocomplete="off" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-8">
+                                        <div class="row">
+                                            <label class="gInputLable">Breach To</label>
+                                            <div class="col">
+                                                <input type="text" class="gInnerInput-11" id="breach2"
+                                                     (keydown)="keytab($event, 'saveSla')" formControlName="breachtwoSLA"
+                                                    autocomplete="off" placeholder="Enter Email" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-12 col-lg-12 mt-2">
+                                        <div class="row">
+                                            <div class="col d-flex justify-content-center">
+                                                <button mat-button class="gNormalButton text-nowrap col-1" id="saveSla"
+                                                    type="button" (click)="saveSlaScreen(Edited)">
+                                                    <i class="fa fa-eye"></i> {{Edited ? 'Save' : 'Update'}}
+                                                </button>
+                                                @if(Edited) {
+                                                    <button mat-button class="gNormalButton col-1" type="button"
+                                                    id="clearSla" (click)="clearScreen()">
+                                                    <mat-icon>clear</mat-icon> Clear
+                                                </button>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+</div>
